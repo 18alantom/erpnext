@@ -10,3 +10,6 @@ from frappe.model.document import Document
 class QualityGoal(Document):
 	def validate(self):
 		pass
+
+	def on_submit(self):
+		pass

@@ -6,11 +6,15 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "goal",
+  "department",
   "date",
   "cb_00",
   "procedure",
   "status",
+  "section_break_6",
+  "start_date",
+  "column_break_8",
+  "end_date",
   "sb_00",
   "reviews",
   "sb_01",
@@ -68,12 +72,30 @@
    "read_only": 1
   },
   {
-   "fieldname": "goal",
+   "fieldname": "department",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Goal",
+   "label": "Department",
    "options": "Quality Goal",
    "reqd": 1
+  },
+  {
+   "fieldname": "section_break_6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "column_break_8",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -84,7 +106,7 @@
    "link_fieldname": "review"
   }
  ],
- "modified": "2020-10-21 12:56:47.046172",
+ "modified": "2021-09-06 13:35:54.314566",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Review",
@@ -129,6 +151,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "title_field": "goal",
+ "title_field": "department",
  "track_changes": 1
 }

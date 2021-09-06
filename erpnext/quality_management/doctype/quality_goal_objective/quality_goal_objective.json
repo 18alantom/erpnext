@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "autoname": "format:{####}",
  "creation": "2019-05-26 15:03:43.996455",
  "doctype": "DocType",
@@ -14,23 +15,28 @@
   {
    "fetch_from": "goal.objective",
    "fieldname": "objective",
-   "fieldtype": "Text",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Objective",
+   "options": "Quality Objective",
    "reqd": 1
   },
   {
+   "fetch_from": "objective.target",
    "fieldname": "target",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Target"
+   "label": "Target",
+   "read_only": 1
   },
   {
+   "fetch_from": "objective.uom",
    "fieldname": "uom",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "UOM",
-   "options": "UOM"
+   "options": "UOM",
+   "read_only": 1
   },
   {
    "fieldname": "cb_00",
@@ -38,7 +44,8 @@
   }
  ],
  "istable": 1,
- "modified": "2019-05-26 16:12:54.832058",
+ "links": [],
+ "modified": "2021-09-06 12:50:57.390558",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Goal Objective",
