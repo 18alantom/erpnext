@@ -16,7 +16,7 @@
   "frequency",
   "column_break_10",
   "weekday",
-  "interval",
+  "monthly_frequency",
   "sb_01",
   "objectives"
  ],
@@ -81,19 +81,19 @@
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:doc.frequency == 'Monthly';",
-   "description": "If Interval is set to 3, then a Quality Review will be created every 3 months starting from the Start Date and ending on the End Date.",
-   "fieldname": "interval",
-   "fieldtype": "Int",
-   "label": "Interval"
-  },
-  {
    "fieldname": "section_break_8",
    "fieldtype": "Section Break"
   },
   {
    "fieldname": "column_break_10",
    "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.frequency == 'Monthly';",
+   "description": "If Frequency is set to 3, then a Quality Review will be created every 3 months, for the previous 3 months, starting from the Start Date and ending on the End Date.",
+   "fieldname": "monthly_frequency",
+   "fieldtype": "Int",
+   "label": "Monthly Frequency"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -104,7 +104,7 @@
    "link_fieldname": "department"
   }
  ],
- "modified": "2021-09-06 14:15:37.586594",
+ "modified": "2021-09-06 17:42:55.149290",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Goal",

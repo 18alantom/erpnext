@@ -5,6 +5,7 @@
 from __future__ import unicode_literals
 
 import frappe
+from datetime import timedelta, date
 from frappe.model.document import Document
 
 
@@ -12,11 +13,12 @@ class QualityReview(Document):
 	def validate(self):
 		# fetch targets from goal
 		if not self.reviews:
-			for d in frappe.get_doc('Quality Goal', self.goal).objectives:
+			for d in frappe.get_doc('Quality Goal', self.department).objectives:
 				self.append('reviews', dict(
 					objective = d.objective,
 					target = d.target,
-					uom = d.uom
+					uom = d.uom,
+					status = "Open"
 				))
 
 		self.set_status()
@@ -30,37 +32,32 @@ class QualityReview(Document):
 		else:
 			self.status = 'Passed'
 
-def review():
-	day = frappe.utils.getdate().day
-	weekday = frappe.utils.getdate().strftime("%A")
-	month = frappe.utils.getdate().strftime("%B")
-
-	for goal in frappe.get_list("Quality Goal", fields=['name', 'frequency', 'date', 'weekday']):
-		if goal.frequency == 'Daily':
-			create_review(goal.name)
-
-		elif goal.frequency == 'Weekly' and goal.weekday == weekday:
-			create_review(goal.name)
-
-		elif goal.frequency == 'Monthly' and goal.date == str(day):
-			create_review(goal.name)
-
-		elif goal.frequency == 'Quarterly' and day==1 and get_quarter(month):
-			create_review(goal.name)
-
-def create_review(goal):
-	goal = frappe.get_doc("Quality Goal", goal)
+def create_quality_review(goal_name):
+	goal = frappe.get_doc("Quality Goal", goal_name)
+	today = frappe.utils.getdate()
 
 	review = frappe.get_doc({
 		"doctype": "Quality Review",
-		"goal": goal.name,
-		"date": frappe.utils.getdate()
+		"department": goal.name,
+		"status": "Open",
+		"date": today,
+		"start_date": get_start_date(goal, today),
+		"end_date": today,
 	})
 
 	review.insert(ignore_permissions=True)
 
-def get_quarter(month):
-	if month in  ["January", "April", "July", "October"]:
-		return True
-	else:
-		return False
+def get_start_date(goal, today):
+	if goal.frequency == "Daily":
+		return today - timedelta(days=1)
+	elif goal.frequency == "Weekly":
+		return today - timedelta(weeks=1)
+	elif goal.frequency == "Monthly":
+		y = today.year
+		m = today.month
+		ny = y - goal.monthly_frequency // 12
+		nm = m - goal.monthly_frequency % 12
+		if nm <= 0:
+			nm += 12
+			ny -= 1
+		return date(ny, nm, today.day)

@@ -378,7 +378,6 @@ scheduler_events = {
 		"erpnext.crm.doctype.contract.contract.update_status_for_contracts",
 		"erpnext.projects.doctype.project.project.update_project_sales_billing",
 		"erpnext.projects.doctype.project.project.send_project_status_email_to_users",
-		"erpnext.quality_management.doctype.quality_review.quality_review.review",
 		"erpnext.support.doctype.service_level_agreement.service_level_agreement.check_agreement_status",
 		"erpnext.crm.doctype.email_campaign.email_campaign.send_email_to_leads_or_contacts",
 		"erpnext.crm.doctype.email_campaign.email_campaign.set_email_campaign_status",
@@ -387,6 +386,7 @@ scheduler_events = {
 		"erpnext.buying.doctype.supplier_quotation.supplier_quotation.set_expired_status",
 		"erpnext.accounts.doctype.process_statement_of_accounts.process_statement_of_accounts.send_auto_email",
 		"erpnext.non_profit.doctype.membership.membership.set_expired_status"
+		"erpnext.quality_management.doctype.quality_goal.quality_goal.create_scheduled_quality_reviews"
 	],
 	"daily_long": [
 		"erpnext.setup.doctype.email_digest.email_digest.send",
