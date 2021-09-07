@@ -9,7 +9,17 @@
   "objective",
   "uom",
   "column_break_3",
+  "department",
   "target",
+  "section_break_6",
+  "ownership",
+  "procedure",
+  "column_break_7",
+  "owner_name",
+  "section_break_11",
+  "measurement",
+  "column_break_13",
+  "data_source",
   "section_break_5",
   "description"
  ],
@@ -17,7 +27,6 @@
   {
    "fieldname": "objective",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Objective Name",
    "reqd": 1,
    "unique": 1
@@ -49,11 +58,68 @@
   {
    "fieldname": "section_break_5",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "measurement",
+   "fieldtype": "Small Text",
+   "label": "Measurement"
+  },
+  {
+   "fieldname": "ownership",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Ownership",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "data_source",
+   "fieldtype": "Small Text",
+   "label": "Data Source"
+  },
+  {
+   "fieldname": "procedure",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Procedure",
+   "options": "Quality Procedure",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "ownership.full_name",
+   "fieldname": "owner_name",
+   "fieldtype": "Data",
+   "label": "Owner Name",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_11",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_13",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-09-06 12:45:24.567564",
+ "modified": "2021-09-07 14:56:00.896708",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Objective",

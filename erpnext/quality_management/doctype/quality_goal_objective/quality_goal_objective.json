@@ -7,9 +7,16 @@
  "engine": "InnoDB",
  "field_order": [
   "objective",
+  "uom",
   "cb_00",
   "target",
-  "uom"
+  "section_break_5",
+  "ownership",
+  "procedure",
+  "measurement",
+  "column_break_8",
+  "owner_name",
+  "data_source"
  ],
  "fields": [
   {
@@ -22,6 +29,7 @@
    "reqd": 1
   },
   {
+   "columns": 2,
    "fetch_from": "objective.target",
    "fieldname": "target",
    "fieldtype": "Float",
@@ -30,6 +38,7 @@
    "read_only": 1
   },
   {
+   "columns": 2,
    "fetch_from": "objective.uom",
    "fieldname": "uom",
    "fieldtype": "Link",
@@ -41,11 +50,58 @@
   {
    "fieldname": "cb_00",
    "fieldtype": "Column Break"
+  },
+  {
+   "columns": 3,
+   "fetch_from": "objective.procedure",
+   "fieldname": "procedure",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Procedure",
+   "options": "Quality Procedure",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "objective.measurement",
+   "fieldname": "measurement",
+   "fieldtype": "Small Text",
+   "label": "Measurement",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "objective.ownership",
+   "fieldname": "ownership",
+   "fieldtype": "Link",
+   "label": "Ownership",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "objective.data_source",
+   "fieldname": "data_source",
+   "fieldtype": "Small Text",
+   "label": "Data Source",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "objective.owner_name",
+   "fieldname": "owner_name",
+   "fieldtype": "Data",
+   "label": "Owner Name",
+   "read_only": 1
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2021-09-06 12:50:57.390558",
+ "modified": "2021-09-07 15:09:21.498450",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Goal Objective",

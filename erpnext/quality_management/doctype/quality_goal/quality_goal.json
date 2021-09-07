@@ -7,7 +7,6 @@
  "engine": "InnoDB",
  "field_order": [
   "department",
-  "procedure",
   "section_break_4",
   "start_date",
   "column_break_6",
@@ -28,13 +27,6 @@
    "in_list_view": 1,
    "label": "Monitoring Frequency",
    "options": "None\nDaily\nWeekly\nMonthly"
-  },
-  {
-   "fieldname": "procedure",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Procedure",
-   "options": "Quality Procedure"
   },
   {
    "depends_on": "eval:doc.frequency == 'Weekly';",
@@ -104,7 +96,7 @@
    "link_fieldname": "department"
   }
  ],
- "modified": "2021-09-06 17:42:55.149290",
+ "modified": "2021-09-07 13:05:18.389162",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Goal",

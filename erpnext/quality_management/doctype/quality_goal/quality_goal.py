@@ -53,3 +53,15 @@ def get_has_exact_monthly_interval_passed(start_date, end_date, monthly_frequenc
 		passed_interval = (end_date.year - start_date.year) * 12 \
 			+ end_date.month - start_date.month
 		return passed_interval % monthly_frequency == 0
+
+@frappe.whitelist()
+def get_quality_objectives_by_department(department):
+	return frappe.get_list(
+		"Quality Objective",
+		fields=[
+			"name", "uom", "target", "procedure",
+			"ownership", "owner_name", "measurement",
+			"data_source"
+		],
+		filters={"department":department}
+	)

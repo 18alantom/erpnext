@@ -3,11 +3,12 @@
 
 frappe.ui.form.on('Quality Review', {
 	department(frm) {
+		const { department } = frm.doc;
 		frappe.call({
-			"method": "frappe.client.get",
+			method: "frappe.client.get",
 			args: {
 				doctype: "Quality Goal",
-				name: frm.doc.department
+				name: department
 			},
 			callback: function(data){
 				frm.fields_dict.reviews.grid.remove_all();
@@ -17,13 +18,26 @@ frappe.ui.form.on('Quality Review', {
 					frm.fields_dict.reviews.get_value()[i].objective = objectives[i].objective;
 					frm.fields_dict.reviews.get_value()[i].target = objectives[i].target;
 					frm.fields_dict.reviews.get_value()[i].uom = objectives[i].uom;
+					frm.fields_dict.reviews.get_value()[i].ownership = objectives[i].ownership;
+					frm.fields_dict.reviews.get_value()[i].owner_name = objectives[i].owner_name;
 				}
-				frm.refresh();
+				frm.refresh_field("reviews");
 			}
+		});
+
+		frappe.call({
+			method:
+				"erpnext.quality_management.doctype.quality_review.quality_review.get_start_and_end_date",
+			args: { department },
+			callback: function (r) {
+				// If going in core please merge the two frappe.calls
+				Object.assign(frm.doc, r.message);
+				frm.refresh_field("start_date");
+				frm.refresh_field("end_date");
+			},
 		});
 	},
 });
-
 
 frappe.ui.form.on('Quality Review Objective', {
 	achieved(frm, cdt, cdn) {
