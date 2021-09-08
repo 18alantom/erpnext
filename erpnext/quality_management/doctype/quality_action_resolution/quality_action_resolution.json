@@ -7,9 +7,16 @@
  "field_order": [
   "problem",
   "resolution",
+  "section_break_4",
   "status",
+  "column_break_6",
   "responsible",
-  "completion_by"
+  "section_break_5",
+  "completion_by",
+  "completed_by",
+  "column_break_8",
+  "completed_on",
+  "completed_by_name"
  ],
  "fields": [
   {
@@ -43,12 +50,49 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Completion By"
+  },
+  {
+   "fieldname": "completed_by",
+   "fieldtype": "Link",
+   "label": "Completed By",
+   "mandatory_depends_on": "eval:doc.status===\"Completed\"",
+   "options": "User"
+  },
+  {
+   "fieldname": "completed_on",
+   "fieldtype": "Date",
+   "label": "Completed On",
+   "mandatory_depends_on": "eval:doc.status===\"Completed\""
+  },
+  {
+   "fetch_from": "completed_by.full_name",
+   "fieldname": "completed_by_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Completed By (Name)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2020-10-21 12:59:25.566682",
+ "modified": "2021-09-08 15:24:13.582275",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Action Resolution",

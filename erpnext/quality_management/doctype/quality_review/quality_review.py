@@ -10,7 +10,7 @@ from frappe.model.document import Document
 
 
 class QualityReview(Document):
-	def validate(self):
+	def before_insert(self):
 		# fetch targets from goal
 		if not self.reviews:
 			for d in frappe.get_doc('Quality Goal', self.department).objectives:
@@ -23,6 +23,9 @@ class QualityReview(Document):
 
 		self.set_status()
 
+	def before_save(self):
+		self.create_quality_actions_for_failed_reviews()
+
 	def set_status(self):
 		# if any child item is failed, fail the parent
 		if not len(self.reviews or []) or any([d.status=='Open' for d in self.reviews]):
@@ -31,6 +34,15 @@ class QualityReview(Document):
 			self.status = 'Failed'
 		else:
 			self.status = 'Passed'
+
+	def create_quality_actions_for_failed_reviews(self):
+		for review in self.reviews:
+			if review.status != "Failed":
+				continue
+
+			if check_should_create_quality_action_for_review(review):
+				create_quality_action_from_review(review)
+
 
 def create_quality_review(goal_name):
 	goal = frappe.get_doc("Quality Goal", goal_name)
@@ -50,6 +62,33 @@ def create_quality_review(goal_name):
 
 @frappe.whitelist()
 def get_start_and_end_date(department):
+	"""
+		Autoset start_date and end_date are dependent on the linked Quality Goal
+		Examples:
+			QG :: Daily, 01/01/2021
+				QR :: [
+					(31/12/2020, 01/01/2021),
+					(01/01/2021, 02/01/2021),
+					(02/01/2021, 03/01/2021),
+					...
+				]
+
+			QG :: Weekly, Tuesday, 01/01/2021
+				QR :: [
+					(29/12/2020, 01/04/2021),
+					(01/05/2021, 01/11/2021),
+					(01/12/2021, 01/18/2021),
+					...
+				]
+
+			QG :: Monthly, 7, 01/01/2021
+				QR :: [
+					(01/06/2020, 31/12/2020),
+					(01/01/2021, 31/07/2021),
+					(01/08/2021, 28/02/2021),
+					...
+				]
+	"""
 	goal = frappe.get_value(
 		"Quality Goal",
 		department,
@@ -127,3 +166,33 @@ def months_between(d1, d2):
 	y = abs(d2.year - d1.year)
 	m = abs(d2.month + (y * 12) - d1.month)
 	return m
+
+def check_should_create_quality_action_for_review(review):
+	qa_list = frappe.db.sql("""
+		SELECT name
+		FROM `tabQuality Action`
+		WHERE
+			review=%(review)s
+			AND objective=%(objective)s
+	""", dict(review=review.parent, objective=review.objective))
+	return len(qa_list) == 0
+
+def create_quality_action_from_review(review):
+	# review is a row from the Quality Review's Reviews table
+	department, procedure = frappe.db.get_values(
+		"Quality Objective",
+		review.objective,
+		["department", "procedure"]
+	)[0]
+
+	action = frappe.get_doc({
+		"doctype": "Quality Action",
+		"review": review.parent,
+		"objective": review.objective,
+		"department": department,
+		"procedure": procedure,
+		"date": frappe.utils.getdate(),
+		"status": "Open",
+		"resolutions": [{"status":"Open"}]
+	})
+	action.insert(ignore_permissions=True)

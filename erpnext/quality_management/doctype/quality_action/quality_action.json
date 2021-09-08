@@ -27,10 +27,12 @@
    "read_only": 1
   },
   {
+   "fetch_from": "objective.procedure",
    "fieldname": "procedure",
    "fieldtype": "Link",
    "label": "Procedure",
-   "options": "Quality Procedure"
+   "options": "Quality Procedure",
+   "read_only": 1
   },
   {
    "default": "Open",
@@ -77,10 +79,11 @@
    "fieldname": "objective",
    "fieldtype": "Link",
    "label": "Objective",
-   "options": "Quality Objective"
+   "options": "Quality Objective",
+   "reqd": 1,
+   "unique": 1
   },
   {
-   "fetch_from": "review.department",
    "fieldname": "department",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -91,7 +94,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-09-06 14:00:59.650619",
+ "modified": "2021-09-08 16:38:26.826267",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Action",
@@ -124,5 +127,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "title_field": "objective",
  "track_changes": 1
 }
