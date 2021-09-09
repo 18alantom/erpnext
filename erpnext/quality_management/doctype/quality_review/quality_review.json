@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "format:QA-REV-{#####}",
  "creation": "2018-10-02 11:45:16.301955",
  "doctype": "DocType",
@@ -106,7 +107,7 @@
    "link_fieldname": "review"
   }
  ],
- "modified": "2021-09-06 13:35:54.314566",
+ "modified": "2021-09-09 10:25:32.090928",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Review",

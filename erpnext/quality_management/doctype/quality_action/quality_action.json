@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "format:QA-ACT-{#####}",
  "creation": "2018-10-02 11:40:43.666100",
  "doctype": "DocType",
@@ -94,7 +95,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-09-08 16:38:26.826267",
+ "modified": "2021-09-09 10:25:07.916238",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Action",

@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "field:objective",
  "creation": "2021-09-06 12:38:03.295919",
  "doctype": "DocType",
@@ -119,7 +120,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-09-07 14:56:00.896708",
+ "modified": "2021-09-09 10:24:42.362770",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Objective",
