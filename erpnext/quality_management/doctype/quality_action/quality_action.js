@@ -1,8 +1,13 @@
 // Copyright (c) 2018, Frappe and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on('Quality Action', {
-
+frappe.ui.form.on("Quality Action", {
+	department(frm) {
+		const { department } = frm.doc;
+		frm.set_query("objective", () => ({
+			filters: { department },
+		}));
+	},
 });
 
 frappe.ui.form.on("Quality Action Resolution", {

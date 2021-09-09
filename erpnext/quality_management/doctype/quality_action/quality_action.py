@@ -5,6 +5,7 @@
 from __future__ import unicode_literals
 
 import frappe
+from frappe import _
 from operator import itemgetter
 from frappe.model.document import Document
 
@@ -15,8 +16,12 @@ class QualityAction(Document):
 		self.validate_objective()
 
 	def validate_objective(self):
+		if not self.review:
+			return
+
 		allowed_objectives = frappe.db.sql("""
-			SELECT objective FROM `tabQuality Review Objective`
+			SELECT objective
+			FROM `tabQuality Review Objective`
 			WHERE parent=%s
 		""", self.review)
 		allowed_objectives = list(map(itemgetter(0), allowed_objectives))

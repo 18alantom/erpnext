@@ -23,7 +23,6 @@
    "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "in_list_view": 1,
    "label": "Date",
    "read_only": 1
   },
@@ -72,7 +71,6 @@
   {
    "fieldname": "review",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Review",
    "options": "Quality Review"
   },
@@ -95,7 +93,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-09-09 10:25:07.916238",
+ "modified": "2021-09-09 11:28:04.522703",
  "modified_by": "Administrator",
  "module": "Quality Management",
  "name": "Quality Action",

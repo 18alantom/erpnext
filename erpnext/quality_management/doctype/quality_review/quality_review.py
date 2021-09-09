@@ -23,9 +23,6 @@ class QualityReview(Document):
 
 		self.set_status()
 
-	def before_save(self):
-		self.create_quality_actions_for_failed_reviews()
-
 	def set_status(self):
 		# if any child item is failed, fail the parent
 		if not len(self.reviews or []) or any([d.status=='Open' for d in self.reviews]):
@@ -35,33 +32,25 @@ class QualityReview(Document):
 		else:
 			self.status = 'Passed'
 
-	def create_quality_actions_for_failed_reviews(self):
-		for review in self.reviews:
-			if review.status != "Failed":
-				continue
-
-			if check_should_create_quality_action_for_review(review):
-				create_quality_action_from_review(review)
-
 
 def create_quality_review(goal_name):
 	goal = frappe.get_doc("Quality Goal", goal_name)
 	today = frappe.utils.getdate()
-	end_date = get_end_date(goal, today)
+	end_date = get_interval_end_date(goal, today)
 
 	review = frappe.get_doc({
 		"doctype": "Quality Review",
 		"department": goal.name,
 		"status": "Open",
 		"date": today,
-		"start_date": get_start_date(goal, end_date),
+		"start_date": get_interval_start_date(goal, end_date),
 		"end_date": end_date
 	})
 
 	review.insert(ignore_permissions=True)
 
 @frappe.whitelist()
-def get_start_and_end_date(department):
+def get_interval_start_and_end_date(department):
 	"""
 		Autoset start_date and end_date are dependent on the linked Quality Goal
 		Examples:
@@ -96,11 +85,11 @@ def get_start_and_end_date(department):
 		as_dict=1
 	)
 	today = frappe.utils.getdate()
-	end_date = get_end_date(goal, today)
-	start_date = get_start_date(goal=goal, end_date=end_date)
+	end_date = get_interval_end_date(goal, today)
+	start_date = get_interval_start_date(goal=goal, end_date=end_date)
 	return dict(start_date=start_date, end_date=end_date)
 
-def get_end_date(goal, today):
+def get_interval_end_date(goal, today):
 	dow = [
 		"Sunday", "Monday", "Tuesday", "Wednesday",
 		"Thursday", "Friday", "Saturday"
@@ -124,7 +113,7 @@ def get_end_date(goal, today):
 			goal.start_date, today, goal.monthly_frequency
 		) - timedelta(days=1)
 
-def get_start_date(goal, end_date):
+def get_interval_start_date(goal, end_date):
 	if goal.frequency == "Daily":
 		return end_date - timedelta(days=1)
 	elif goal.frequency == "Weekly":
@@ -137,21 +126,23 @@ def get_start_date(goal, end_date):
 		if nm <= 0:
 			nm += 12
 			ny -= 1
-		return date(ny, nm, end_date.day) + timedelta(days=1)
+		day = goal.start_date.day
+		while True:
+			try:
+				return date(ny, nm, day)
+			except:
+				day -= 1
 
 def get_monthly_interval_end_date_containing_today(start_date, today, monthly_frequency):
-	from math import ceil
-	temp_date = get_the_nth_day_of_the_mth_next_month(today, n=start_date.day)
-	mb = months_between(start_date, temp_date)
-	ni = ceil(mb / monthly_frequency)
-	end_date = get_the_nth_day_of_the_mth_next_month(
-		start_date, n=start_date, m=monthly_frequency * (ni - 1)
-	)
-	if temp_date > end_date:
-		end_date = get_the_nth_day_of_the_mth_next_month(
-			start_date, n=start_date, m=monthly_frequency * ni
-		)
-	return end_date
+	m = 0
+	d = start_date.day
+
+	while True:
+		end_date = get_the_nth_day_of_the_mth_next_month(start_date, n=d, m=m * monthly_frequency)
+		if end_date < today:
+			m += 1
+		else:
+			return end_date
 
 def get_the_nth_day_of_the_mth_next_month(d, n=1, m=1):
 	m = d.month + m
@@ -160,39 +151,13 @@ def get_the_nth_day_of_the_mth_next_month(d, n=1, m=1):
 	if m == 0:
 		m = 12
 		y -= 1
-	return date(year=y, month=m, day=n) 
+	while True:
+		try:
+			return date(y, m, n)
+		except:
+			n -= 1
 
 def months_between(d1, d2):
 	y = abs(d2.year - d1.year)
-	m = abs(d2.month + (y * 12) - d1.month)
+	m = abs(d2.month - (y * 12) - d1.month)
 	return m
-
-def check_should_create_quality_action_for_review(review):
-	qa_list = frappe.db.sql("""
-		SELECT name
-		FROM `tabQuality Action`
-		WHERE
-			review=%(review)s
-			AND objective=%(objective)s
-	""", dict(review=review.parent, objective=review.objective))
-	return len(qa_list) == 0
-
-def create_quality_action_from_review(review):
-	# review is a row from the Quality Review's Reviews table
-	department, procedure = frappe.db.get_values(
-		"Quality Objective",
-		review.objective,
-		["department", "procedure"]
-	)[0]
-
-	action = frappe.get_doc({
-		"doctype": "Quality Action",
-		"review": review.parent,
-		"objective": review.objective,
-		"department": department,
-		"procedure": procedure,
-		"date": frappe.utils.getdate(),
-		"status": "Open",
-		"resolutions": [{"status":"Open"}]
-	})
-	action.insert(ignore_permissions=True)
